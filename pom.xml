@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <parent>
+        <artifactId>lutece-global-pom</artifactId>
+        <groupId>fr.paris.lutece.tools</groupId>
+        <version>6.1.0</version>
+    </parent>
+  
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>fr.paris.lutece.plugins</groupId>
+  <artifactId>library-qrcode</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
+  <name>Library QrCode</name>
+  <url>http://maven.apache.org</url>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+  
+  <repositories>
+        <repository>
+            <id>lutece</id>
+            <name>luteceRepository</name>
+            <url>http://dev.lutece.paris.fr/maven_repository</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+	    	<groupId>fr.paris.lutece</groupId>
+	    	<artifactId>lutece-core</artifactId>
+	    	<version>[7.0.0,)</version>
+	</dependency>
+    <!-- https://mvnrepository.com/artifact/io.nayuki/qrcodegen -->
+	<dependency>
+	    <groupId>io.nayuki</groupId>
+	    <artifactId>qrcodegen</artifactId>
+	    <version>1.4.0</version>
+	</dependency>
+  </dependencies>
+</project>
