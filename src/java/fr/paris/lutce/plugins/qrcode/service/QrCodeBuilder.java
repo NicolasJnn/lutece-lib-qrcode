@@ -7,8 +7,11 @@ import fr.paris.lutce.plugins.qrcode.IQrCodeGenerator;
 
 /**
  * Builder class for constructing instances of {@link QRcodeGenerator}.
+ * <p>
  * This class provides a fluent API for setting various properties of the QR code generator, such as the message,
- * additional parameters, and the error correction level.
+ * additional parameters, error correction level, and logo. The builder pattern ensures that the configuration
+ * of the QR code generator can be customized step by step before the final object is created.
+ * </p>
  */
 public class QrCodeBuilder {
 
@@ -25,7 +28,7 @@ public class QrCodeBuilder {
 
     /**
      * Flag indicating whether the QR code should include additional parameters.
-     * Defaults to false.
+     * Defaults to {@code false}.
      */
     protected boolean withParameters = false;
 
@@ -34,6 +37,12 @@ public class QrCodeBuilder {
      * Defaults to {@link CorrectionLevel#MEDIUM}.
      */
     protected CorrectionLevel correctionLevel = CorrectionLevel.MEDIUM;
+
+    /**
+     * An instance of {@link LogoHandler} that manages logo handling for the QR code.
+     * Defaults to {@code null}.
+     */
+    protected LogoHandler logoHandler = null;
 
     /**
      * Constructs a new {@link QrCodeBuilder} with the specified message.
@@ -46,6 +55,7 @@ public class QrCodeBuilder {
 
     /**
      * Adds a single parameter to be included in the QR code's message.
+     * The parameter will be appended to the URL query string in the format {@code key=value}.
      * 
      * @param key The key for the parameter.
      * @param value The value for the parameter.
@@ -59,6 +69,7 @@ public class QrCodeBuilder {
 
     /**
      * Adds multiple parameters to be included in the QR code's message.
+     * These parameters will be appended to the URL query string.
      * 
      * @param parameters A map of parameters to be added.
      * @return The current {@link QrCodeBuilder} instance for method chaining.
@@ -71,6 +82,7 @@ public class QrCodeBuilder {
 
     /**
      * Sets the error correction level to be used when generating the QR code.
+     * The error correction level affects how much data can be corrected if the QR code is damaged or incomplete.
      * 
      * @param correctionLevel The desired error correction level.
      * @return The current {@link QrCodeBuilder} instance for method chaining.
@@ -81,7 +93,20 @@ public class QrCodeBuilder {
     }
 
     /**
+     * Sets a {@link LogoHandler} for embedding a logo in the center of the QR code.
+     * This allows for customization of the logo's scale and provides the logo image.
+     * 
+     * @param logoHandler The {@link LogoHandler} instance containing logo settings.
+     * @return The current {@link QrCodeBuilder} instance for method chaining.
+     */
+    public QrCodeBuilder addLogoHandler(LogoHandler logoHandler) {
+        this.logoHandler = logoHandler;
+        return this;
+    }
+
+    /**
      * Builds and returns an instance of {@link QRcodeGenerator} based on the current builder configuration.
+     * The configuration includes the message, parameters, error correction level, and logo handler.
      * 
      * @return A new {@link QRcodeGenerator} instance configured according to the builder's properties.
      */

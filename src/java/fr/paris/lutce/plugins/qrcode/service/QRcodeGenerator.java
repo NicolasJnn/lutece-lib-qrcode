@@ -3,7 +3,6 @@ package fr.paris.lutce.plugins.qrcode.service;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -17,40 +16,50 @@ import fr.paris.lutce.plugins.qrcode.IQrCodeGenerator;
 import io.nayuki.qrcodegen.QrCode;
 import io.nayuki.qrcodegen.QrCode.Ecc;
 
-
 /**
- * Concrete implementation of the QR code generator.
- * This class allows creating a QR code from a message, adding parameters to it, 
- * and placing a logo at the center of the QR code.
+ * Concrete implementation of the {@link IQrCodeGenerator} interface for generating QR codes.
+ * <p>
+ * This class allows creating a QR code from a message, adding query parameters to the URL encoded in the QR code,
+ * and placing a logo at the center of the QR code image.
+ * </p>
  */
-public class QRcodeGenerator implements IQrCodeGenerator{
-	
-	public static QrCodeBuilder builder(String message) {
-		return new QrCodeBuilder(message);
-	}
+public class QRcodeGenerator implements IQrCodeGenerator {
 
+    /**
+     * The default scale factor for the QR code image (size).
+     */
     private static final int DEFAULT_QRCODE_SCALE = 10;
+
+    /**
+     * The default border size for the QR code image.
+     */
     private static final int DEFAULT_QRCODE_BORDER = 4;
+
+    /**
+     * The default scale factor for the logo in the QR code.
+     */
     private static final double DEFAULT_QRCODE_LOGO_SCALE = 0.2;
-    
+
     private BufferedImage qrCodeImage;
     private Map<String, String> parameters = new HashMap<>();
     private boolean withParameters;
     private String message;
     private CorrectionLevel correctionLevel;
+    private LogoHandler logoHandler;
 
     /**
-     * Private constructor used by the Builder to create an instance of QRcodeGenerator.
+     * Private constructor used by the {@link QrCodeBuilder} to create an instance of QRcodeGenerator.
      * 
-     * @param builder The Builder object that initializes the QRcodeGenerator.
+     * @param builder The {@link QrCodeBuilder} instance that initializes the QRcodeGenerator.
      */
     protected QRcodeGenerator(QrCodeBuilder builder) {
         this.message = builder.message;
         this.parameters = builder.parameters;
         this.withParameters = builder.withParameters;
         this.correctionLevel = builder.correctionLevel;
+        this.logoHandler = builder.logoHandler;
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -58,7 +67,7 @@ public class QRcodeGenerator implements IQrCodeGenerator{
     public String getMessage() {
         return message;
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -77,7 +86,7 @@ public class QRcodeGenerator implements IQrCodeGenerator{
 
     /**
      * Generates the text (message + parameters) to be encoded in the QR code.
-     *
+     * 
      * @return The generated text string.
      * @throws UnsupportedEncodingException If URL encoding fails.
      */
@@ -95,42 +104,48 @@ public class QRcodeGenerator implements IQrCodeGenerator{
         }
         return sb.toString();
     }
-    
+
     /**
      * Generates the QR code image using the specified scale and border size.
-     *
-     * @param scale The scale of the image.
-     * @param border The size of the QR code border.
+     * 
+     * @param scale The scale of the image (size of the QR code).
+     * @param border The size of the QR code's border.
      * @return The generated QR code image.
      * @throws UnsupportedEncodingException If text encoding fails.
+     * @throws QrCodeGeneratorException If QR code image generation fails.
      */
-    public BufferedImage toImage(int scale, int border) throws UnsupportedEncodingException {
-    	this.qrCodeImage = QrCode.encodeText( generate( ), adaptCorrectionLevel( ) ).toImage(scale, border);
+    public BufferedImage toImage(int scale, int border) throws UnsupportedEncodingException, QrCodeGeneratorException {
+        this.qrCodeImage = QrCode.encodeText(generate(), adaptCorrectionLevel()).toImage(scale, border);
+        if (this.logoHandler != null) {
+            addLogoToQRCode(this.logoHandler.getLogo(), this.logoHandler.getScale());
+        }
         return this.qrCodeImage;
     }
 
     /**
      * {@inheritDoc}
+     * 
+     * @throws QrCodeGeneratorException If QR code image generation fails.
      */
     @Override
-	public BufferedImage toImage( ) throws UnsupportedEncodingException {
+    public BufferedImage toImage() throws UnsupportedEncodingException, QrCodeGeneratorException {
         return toImage(DEFAULT_QRCODE_SCALE, DEFAULT_QRCODE_BORDER);
     }
 
-	
     /**
      * Adds a logo to the QR code image with a specific scale factor.
-     *
-     * @param logoFile The logo image file to be added.
+     * The logo will be centered within the QR code.
+     * 
+     * @param logoFile The logo image file to be added to the QR code.
      * @param scale The scale factor to adjust the logo size relative to the QR code.
      * @throws QrCodeGeneratorException If an error occurs while adding the logo.
      */
-    public void addLogoToQRCode(InputStream logoFile, double scale) throws QrCodeGeneratorException {
+    private void addLogoToQRCode(InputStream logoFile, double scale) throws QrCodeGeneratorException {
         BufferedImage logo = null;
         try {
             logo = ImageIO.read(logoFile);
         } catch (IOException e) {
-        	throw new QrCodeGeneratorException("Error reading logo file for QR code generation", e);
+            throw new QrCodeGeneratorException("Error reading logo file for QR code generation", e);
         }
 
         int qrWidth = this.qrCodeImage.getWidth();
@@ -151,22 +166,23 @@ public class QRcodeGenerator implements IQrCodeGenerator{
         g.drawImage(scaledLogoImage, x, y, null);
         g.dispose();
     }
-    
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-	public void addLogoToQRCode(InputStream logoFile) throws QrCodeGeneratorException {
-		addLogoToQRCode(logoFile, DEFAULT_QRCODE_LOGO_SCALE);
-	}
 
     /**
-     * Adapts the error correction level of the QR code using the CorrectionLevel enum.
+     * {@inheritDoc}
+     * 
+     * @throws QrCodeGeneratorException If an error occurs while adding the logo.
+     */
+    @Override
+    public void addLogoToQRCode(InputStream logoFile) throws QrCodeGeneratorException {
+        addLogoToQRCode(logoFile, DEFAULT_QRCODE_LOGO_SCALE);
+    }
+
+    /**
+     * Adapts the error correction level of the QR code using the {@link CorrectionLevel} enum.
      * 
      * @return The error correction level adapted for QR code generation.
      */
     private Ecc adaptCorrectionLevel() {
-		return QrCode.Ecc.valueOf(this.getCorrectionLevel().name());
-	}
-    
+        return QrCode.Ecc.valueOf(this.getCorrectionLevel().name());
+    }
 }

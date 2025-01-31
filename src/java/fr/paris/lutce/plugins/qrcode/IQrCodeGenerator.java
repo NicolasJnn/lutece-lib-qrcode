@@ -40,7 +40,7 @@ public interface IQrCodeGenerator {
      * @return The generated QR code image with default values.
      * @throws UnsupportedEncodingException If text encoding fails.
      */
-    BufferedImage toImage( ) throws UnsupportedEncodingException;
+    BufferedImage toImage( ) throws Exception;
     
     /**
      * Adds a logo to the QR code image.
