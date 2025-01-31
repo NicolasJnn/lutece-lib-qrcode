@@ -4,7 +4,6 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.HashMap;
@@ -34,11 +33,6 @@ public class QRcodeGenerator implements IQrCodeGenerator {
      * The default border size for the QR code image.
      */
     private static final int DEFAULT_QRCODE_BORDER = 4;
-
-    /**
-     * The default scale factor for the logo in the QR code.
-     */
-    private static final double DEFAULT_QRCODE_LOGO_SCALE = 0.2;
 
     private BufferedImage qrCodeImage;
     private Map<String, String> parameters = new HashMap<>();
@@ -117,7 +111,7 @@ public class QRcodeGenerator implements IQrCodeGenerator {
     public BufferedImage toImage(int scale, int border) throws UnsupportedEncodingException, QrCodeGeneratorException {
         this.qrCodeImage = QrCode.encodeText(generate(), adaptCorrectionLevel()).toImage(scale, border);
         if (this.logoHandler != null) {
-            addLogoToQRCode(this.logoHandler.getLogo(), this.logoHandler.getScale());
+            addLogoToQRCode( );
         }
         return this.qrCodeImage;
     }
@@ -140,18 +134,18 @@ public class QRcodeGenerator implements IQrCodeGenerator {
      * @param scale The scale factor to adjust the logo size relative to the QR code.
      * @throws QrCodeGeneratorException If an error occurs while adding the logo.
      */
-    private void addLogoToQRCode(InputStream logoFile, double scale) throws QrCodeGeneratorException {
+    private void addLogoToQRCode( ) throws QrCodeGeneratorException {
         BufferedImage logo = null;
         try {
-            logo = ImageIO.read(logoFile);
+            logo = ImageIO.read(this.logoHandler.getLogo());
         } catch (IOException e) {
             throw new QrCodeGeneratorException("Error reading logo file for QR code generation", e);
         }
 
         int qrWidth = this.qrCodeImage.getWidth();
         int qrHeight = this.qrCodeImage.getHeight();
-        int logoWidth = (int) (qrWidth * scale);
-        int logoHeight = (int) (qrHeight * scale);
+        int logoWidth = (int) (qrWidth * this.logoHandler.getScale());
+        int logoHeight = (int) (qrHeight * this.logoHandler.getScale());
 
         Image scaledLogo = logo.getScaledInstance(logoWidth, logoHeight, Image.SCALE_SMOOTH);
         BufferedImage scaledLogoImage = new BufferedImage(logoWidth, logoHeight, BufferedImage.TYPE_INT_ARGB);
@@ -165,16 +159,6 @@ public class QRcodeGenerator implements IQrCodeGenerator {
         Graphics2D g = this.qrCodeImage.createGraphics();
         g.drawImage(scaledLogoImage, x, y, null);
         g.dispose();
-    }
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @throws QrCodeGeneratorException If an error occurs while adding the logo.
-     */
-    @Override
-    public void addLogoToQRCode(InputStream logoFile) throws QrCodeGeneratorException {
-        addLogoToQRCode(logoFile, DEFAULT_QRCODE_LOGO_SCALE);
     }
 
     /**

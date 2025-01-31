@@ -1,11 +1,9 @@
 package fr.paris.lutce.plugins.qrcode;
 
 import java.awt.image.BufferedImage;
-import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 
 import fr.paris.lutce.plugins.qrcode.service.CorrectionLevel;
-import fr.paris.lutce.plugins.qrcode.service.QrCodeGeneratorException;
 
 /**
  * Interface representing a QR code generator.
@@ -41,13 +39,6 @@ public interface IQrCodeGenerator {
      * @throws UnsupportedEncodingException If text encoding fails.
      */
     BufferedImage toImage( ) throws Exception;
-    
-    /**
-     * Adds a logo to the QR code image.
-     *
-     * @param logoFile The logo image file to be added.
-     * @throws QrCodeGeneratorException If an error occurs while adding the logo.
-     */
-    void addLogoToQRCode( InputStream logoFile ) throws QrCodeGeneratorException;
+
 }
 
