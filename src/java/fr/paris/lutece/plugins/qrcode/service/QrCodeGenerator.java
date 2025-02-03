@@ -39,7 +39,7 @@ public class QrCodeGenerator implements IQrCodeGenerator {
     private boolean withParameters;
     private String message;
     private CorrectionLevel correctionLevel;
-    private LogoQrCode logoHandler;
+    private LogoQrCode logo;
 
     /**
      * Private constructor used by the {@link QrCodeBuilder} to create an instance of QRcodeGenerator.
@@ -51,7 +51,7 @@ public class QrCodeGenerator implements IQrCodeGenerator {
         this.parameters = builder.parameters;
         this.withParameters = builder.withParameters;
         this.correctionLevel = builder.correctionLevel;
-        this.logoHandler = builder.logoHandler;
+        this.logo = builder.logo;
     }
 
     /**
@@ -110,7 +110,7 @@ public class QrCodeGenerator implements IQrCodeGenerator {
      */
     public BufferedImage toImage(int scale, int border) throws UnsupportedEncodingException, QrCodeGeneratorException {
         this.qrCodeImage = QrCode.encodeText(generate(), adaptCorrectionLevel()).toImage(scale, border);
-        if (this.logoHandler != null) {
+        if (this.logo != null) {
             addLogoToQRCode( );
         }
         return this.qrCodeImage;
@@ -137,15 +137,15 @@ public class QrCodeGenerator implements IQrCodeGenerator {
     private void addLogoToQRCode( ) throws QrCodeGeneratorException {
         BufferedImage logo = null;
         try {
-            logo = ImageIO.read(this.logoHandler.getLogo());
+            logo = ImageIO.read(this.logo.getLogo());
         } catch (IOException e) {
             throw new QrCodeGeneratorException("Error reading logo file for QR code generation", e);
         }
 
         int qrWidth = this.qrCodeImage.getWidth();
         int qrHeight = this.qrCodeImage.getHeight();
-        int logoWidth = (int) (qrWidth * this.logoHandler.getScale());
-        int logoHeight = (int) (qrHeight * this.logoHandler.getScale());
+        int logoWidth = (int) (qrWidth * this.logo.getScale());
+        int logoHeight = (int) (qrHeight * this.logo.getScale());
 
         Image scaledLogo = logo.getScaledInstance(logoWidth, logoHeight, Image.SCALE_SMOOTH);
         BufferedImage scaledLogoImage = new BufferedImage(logoWidth, logoHeight, BufferedImage.TYPE_INT_ARGB);

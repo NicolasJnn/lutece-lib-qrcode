@@ -42,7 +42,7 @@ public class QrCodeBuilder {
      * An instance of {@link LogoQrCode} that manages logo handling for the QR code.
      * Defaults to {@code null}.
      */
-    protected LogoQrCode logoHandler = null;
+    protected LogoQrCode logo = null;
 
     /**
      * Constructs a new {@link QrCodeBuilder} with the specified message.
@@ -74,7 +74,7 @@ public class QrCodeBuilder {
      * @param parameters A map of parameters to be added.
      * @return The current {@link QrCodeBuilder} instance for method chaining.
      */
-    public QrCodeBuilder withParameters(Map<String, String> parameters) {
+    public QrCodeBuilder addParameters(Map<String, String> parameters) {
         this.withParameters = true;
         this.parameters.putAll(parameters);
         return this;
@@ -100,7 +100,7 @@ public class QrCodeBuilder {
      * @return The current {@link QrCodeBuilder} instance for method chaining.
      */
     public QrCodeBuilder addLogoHandler(LogoQrCode logoHandler) {
-        this.logoHandler = logoHandler;
+        this.logo = logoHandler;
         return this;
     }
 
