@@ -1,4 +1,4 @@
-package fr.paris.lutce.plugins.qrcode.service;
+package fr.paris.lutece.plugins.qrcode.service;
 
 /**
  * Exception class used for handling errors during QR code generation.

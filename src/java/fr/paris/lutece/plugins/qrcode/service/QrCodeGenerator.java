@@ -1,4 +1,4 @@
-package fr.paris.lutce.plugins.qrcode.service;
+package fr.paris.lutece.plugins.qrcode.service;
 
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -11,7 +11,7 @@ import java.util.Map;
 
 import javax.imageio.ImageIO;
 
-import fr.paris.lutce.plugins.qrcode.IQrCodeGenerator;
+import fr.paris.lutece.plugins.qrcode.IQrCodeGenerator;
 import io.nayuki.qrcodegen.QrCode;
 import io.nayuki.qrcodegen.QrCode.Ecc;
 
@@ -22,7 +22,7 @@ import io.nayuki.qrcodegen.QrCode.Ecc;
  * and placing a logo at the center of the QR code image.
  * </p>
  */
-public class QRcodeGenerator implements IQrCodeGenerator {
+public class QrCodeGenerator implements IQrCodeGenerator {
 
     /**
      * The default scale factor for the QR code image (size).
@@ -39,14 +39,14 @@ public class QRcodeGenerator implements IQrCodeGenerator {
     private boolean withParameters;
     private String message;
     private CorrectionLevel correctionLevel;
-    private LogoHandler logoHandler;
+    private LogoQrCode logoHandler;
 
     /**
      * Private constructor used by the {@link QrCodeBuilder} to create an instance of QRcodeGenerator.
      * 
      * @param builder The {@link QrCodeBuilder} instance that initializes the QRcodeGenerator.
      */
-    protected QRcodeGenerator(QrCodeBuilder builder) {
+    protected QrCodeGenerator(QrCodeBuilder builder) {
         this.message = builder.message;
         this.parameters = builder.parameters;
         this.withParameters = builder.withParameters;

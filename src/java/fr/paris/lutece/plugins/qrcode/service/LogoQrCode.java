@@ -1,4 +1,4 @@
-package fr.paris.lutce.plugins.qrcode.service;
+package fr.paris.lutece.plugins.qrcode.service;
 
 import java.io.InputStream;
 
@@ -7,7 +7,7 @@ import java.io.InputStream;
  * It allows for setting a custom scale for the logo's size relative to the QR code and provides
  * access to the logo image as an {@link InputStream}.
  */
-public class LogoHandler {
+public class LogoQrCode {
 
     /**
      * Default scale factor for the logo, representing 20% of the QR code size.
@@ -27,22 +27,22 @@ public class LogoHandler {
     private InputStream logo;
 
     /**
-     * Constructs a {@link LogoHandler} with a custom scale factor and the logo input stream.
+     * Constructs a {@link LogoQrCode} with a custom scale factor and the logo input stream.
      * 
      * @param scale The scale factor for the logo size (e.g., 0.2 for 20% of QR code size).
      * @param logo The input stream representing the logo image to be embedded.
      */
-    public LogoHandler(double scale, InputStream logo) {
+    public LogoQrCode(double scale, InputStream logo) {
         this.scale = scale;
         this.logo = logo;
     }
 
     /**
-     * Constructs a {@link LogoHandler} with the default scale factor (0.2) and the logo input stream.
+     * Constructs a {@link LogoQrCode} with the default scale factor (0.2) and the logo input stream.
      * 
      * @param logo The input stream representing the logo image to be embedded.
      */
-    public LogoHandler(InputStream logo) {
+    public LogoQrCode(InputStream logo) {
         this.scale = DEFAULT_SCALE;
         this.logo = logo;
     }

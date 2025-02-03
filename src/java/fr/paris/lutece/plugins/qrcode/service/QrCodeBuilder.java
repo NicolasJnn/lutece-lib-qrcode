@@ -1,12 +1,12 @@
-package fr.paris.lutce.plugins.qrcode.service;
+package fr.paris.lutece.plugins.qrcode.service;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import fr.paris.lutce.plugins.qrcode.IQrCodeGenerator;
+import fr.paris.lutece.plugins.qrcode.IQrCodeGenerator;
 
 /**
- * Builder class for constructing instances of {@link QRcodeGenerator}.
+ * Builder class for constructing instances of {@link QrCodeGenerator}.
  * <p>
  * This class provides a fluent API for setting various properties of the QR code generator, such as the message,
  * additional parameters, error correction level, and logo. The builder pattern ensures that the configuration
@@ -39,10 +39,10 @@ public class QrCodeBuilder {
     protected CorrectionLevel correctionLevel = CorrectionLevel.MEDIUM;
 
     /**
-     * An instance of {@link LogoHandler} that manages logo handling for the QR code.
+     * An instance of {@link LogoQrCode} that manages logo handling for the QR code.
      * Defaults to {@code null}.
      */
-    protected LogoHandler logoHandler = null;
+    protected LogoQrCode logoHandler = null;
 
     /**
      * Constructs a new {@link QrCodeBuilder} with the specified message.
@@ -93,24 +93,24 @@ public class QrCodeBuilder {
     }
 
     /**
-     * Sets a {@link LogoHandler} for embedding a logo in the center of the QR code.
+     * Sets a {@link LogoQrCode} for embedding a logo in the center of the QR code.
      * This allows for customization of the logo's scale and provides the logo image.
      * 
-     * @param logoHandler The {@link LogoHandler} instance containing logo settings.
+     * @param logoHandler The {@link LogoQrCode} instance containing logo settings.
      * @return The current {@link QrCodeBuilder} instance for method chaining.
      */
-    public QrCodeBuilder addLogoHandler(LogoHandler logoHandler) {
+    public QrCodeBuilder addLogoHandler(LogoQrCode logoHandler) {
         this.logoHandler = logoHandler;
         return this;
     }
 
     /**
-     * Builds and returns an instance of {@link QRcodeGenerator} based on the current builder configuration.
+     * Builds and returns an instance of {@link QrCodeGenerator} based on the current builder configuration.
      * The configuration includes the message, parameters, error correction level, and logo handler.
      * 
-     * @return A new {@link QRcodeGenerator} instance configured according to the builder's properties.
+     * @return A new {@link QrCodeGenerator} instance configured according to the builder's properties.
      */
     public IQrCodeGenerator build() {
-        return new QRcodeGenerator(this);
+        return new QrCodeGenerator(this);
     }
 }

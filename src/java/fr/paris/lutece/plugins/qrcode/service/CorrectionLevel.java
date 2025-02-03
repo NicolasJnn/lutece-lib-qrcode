@@ -1,4 +1,4 @@
-package fr.paris.lutce.plugins.qrcode.service;
+package fr.paris.lutece.plugins.qrcode.service;
 
 /**
  * Enum representing the error correction levels for a QR code.

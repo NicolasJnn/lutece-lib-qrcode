@@ -1,9 +1,9 @@
-package fr.paris.lutce.plugins.qrcode;
+package fr.paris.lutece.plugins.qrcode;
 
 import java.awt.image.BufferedImage;
 import java.io.UnsupportedEncodingException;
 
-import fr.paris.lutce.plugins.qrcode.service.CorrectionLevel;
+import fr.paris.lutece.plugins.qrcode.service.CorrectionLevel;
 
 /**
  * Interface representing a QR code generator.
